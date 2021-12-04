@@ -23,4 +23,12 @@ app.get('/', (req, res) => {
     res.status(404).send("No valid endpoint here");
 });
 
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.json({
+      message: err.message,
+      error: "syntax error"
+    });
+  });  
+
 app.listen(80, () => console.log('Listening on port 80...')); 

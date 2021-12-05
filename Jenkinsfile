@@ -23,6 +23,7 @@ pipeline {
         script {
           docker.withRegistry( '', registryCredential ) {
             dockerImage.push()
+            dockerImage.push('latest')
           }
         }
       }
@@ -32,15 +33,15 @@ pipeline {
         sh "docker rmi $registry:$BUILD_NUMBER"
       }
     }
-    // stage('Deploy Image to ECS') {
-    //   steps{
-    //     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "AWS_CREDS",
-    //      accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-    //     ]]) {
-    //       sh "ecs deploy --image jumpcloud_api_container docker.io/olayori/jump_api:latest JumpCloud-ECS-Cluster jumpcloud-api
-    //        --region us-east-1 --access-key-id $AWS_ACCESS_KEY_ID --secret-access-key $AWS_SECRET_ACCESS_KEY  --rollback --timeout 900"
-    //     }
-    //   }
-    // }    
+    stage('Deploy Image to ECS') {
+      steps{
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "AWS_CREDS",
+         accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+        ]]) {
+          sh "ecs deploy --image jumpcloud_api_container docker.io/olayori/jump_api:latest JumpCloud-ECS-Cluster jumpcloud-api
+           --region us-east-1 --access-key-id $AWS_ACCESS_KEY_ID --secret-access-key $AWS_SECRET_ACCESS_KEY  --rollback --timeout 900"
+        }
+      }
+    }    
   }
 }

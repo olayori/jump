@@ -7,6 +7,7 @@ app.use(express.json());
 const file = 'sample-text-file.txt';
 const url = `https://www.learningcontainer.com/wp-content/uploads/2020/04/${file}`;
 
+//processing requests to /manage_file
 app.get('/manage_file', (req, res) => { 
   const action = req.body.action;
   if (action && action.toLowerCase() === "read"){
@@ -26,11 +27,13 @@ app.get('/manage_file', (req, res) => {
   }      
 });
 
+//processing requests sent to web root
 app.get('/', (req, res) => {
     res.status(404).send("No valid endpoint here");
     console.log('Invalid endpoint');
 });
 
+//Error handling
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.json({
@@ -40,4 +43,5 @@ app.use(function(err, req, res, next) {
     console.log(err.message);
   });  
 
+//Http server 
 app.listen(80, () => console.log('Listening on port 80...')); 

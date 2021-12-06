@@ -7,7 +7,7 @@ app.use(express.json());
 const file = 'sample-text-file.txt';
 const url = `https://www.learningcontainer.com/wp-content/uploads/2020/04/${file}`;
 
-//processing requests to /manage_file
+//processing api requests to /manage_file
 app.post('/manage_file', (req, res) => { 
   const action = req.body.action;
   if (action && action.toLowerCase() === "read"){

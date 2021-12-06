@@ -43,7 +43,7 @@ describe('API Tests', () => {
     });
     describe('Test POST to /manage_file when no action is found" ', () => {
         it('it should respond with a message when no action is found ', (done) => {
-            let message = "Invalid Request";
+            let message = "Invalid Request (No valid value for key 'action' found in request)";
             let noaction = {
                 "something": "else"
             }

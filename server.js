@@ -1,34 +1,47 @@
 const express = require('express');
 const fs = require('fs');
-const http = require('https');
+const download = require('download');
 const app = express();
 app.use(express.json());
 
-const url = 'https://www.learningcontainer.com/wp-content/uploads/2020/04/sample-text-file.txt';
-const file = fs.createWriteStream("sample.txt");  
-http.get(url, function(response) { response.pipe(file);});
+const file = 'sample-text-file.txt';
+const url = `https://www.learningcontainer.com/wp-content/uploads/2020/04/${file}`;
 
-app.get('/manage_file', (req, res) => {
-  const action = req.body.action
+//processing api requests to /manage_file
+app.post('/manage_file', (req, res) => { 
+  const action = req.body.action;
   if (action && action.toLowerCase() === "read"){
-      res.redirect(url);
-  } else if (action && action.toLowerCase() === "download") {  
-      res.status(200).download('./sample.txt')
+    download(url,'./').then(() => {
+        res.status(200).send(fs.readFileSync(file,'utf8'));
+        console.log('File successfully read');
+    })  
+  } else if (action && action.toLowerCase() === "download") { 
+        download(url,'./').then(() => {
+            res.status(200).download(file);
+            console.log('File successfully downloaded');
+    }) 
   } else {
-      res.status(400).send('Invalid Request (No key "action" found in request)')
+      const errmess = 'Invalid Request (No valid value for key "action" found in request)';
+      res.status(400).send(errmessage)
+      console.log(errmessage);
   }      
 });
 
-app.get('/', (req, res) => {
+//processing requests sent to web root
+app.post('/', (req, res) => {
     res.status(404).send("No valid endpoint here");
+    console.log('Invalid endpoint');
 });
 
+//Error handling
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.json({
       message: err.message,
       error: "syntax error"
     });
+    console.log(err.message);
   });  
 
+//Http server 
 app.listen(80, () => console.log('Listening on port 80...')); 

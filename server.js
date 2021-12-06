@@ -8,7 +8,7 @@ const file = 'sample-text-file.txt';
 const url = `https://www.learningcontainer.com/wp-content/uploads/2020/04/${file}`;
 
 //processing requests to /manage_file
-app.get('/manage_file', (req, res) => { 
+app.post('/manage_file', (req, res) => { 
   const action = req.body.action;
   if (action && action.toLowerCase() === "read"){
     download(url,'./').then(() => {
@@ -28,7 +28,7 @@ app.get('/manage_file', (req, res) => {
 });
 
 //processing requests sent to web root
-app.get('/', (req, res) => {
+app.post('/', (req, res) => {
     res.status(404).send("No valid endpoint here");
     console.log('Invalid endpoint');
 });

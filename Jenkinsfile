@@ -5,16 +5,25 @@ pipeline {
     dockerImage = ''
   }
   agent any
+
+  tools {nodejs "node"}
+
   stages {
     stage('Git Checkout') {
       steps {
         git credentialsId: 'github-token', url: 'https://github.com/olayori/jump_pipeline.git'
       }
     }
+    stage('Test') {
+      steps {
+        sh 'npm install'
+        sh 'npm test'
+      }
+    }
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER" 
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
       }
     }

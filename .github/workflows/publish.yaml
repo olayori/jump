@@ -11,6 +11,7 @@ jobs:
 
     permissions:
       contents: read
+      id-token: write
 
     steps:
       # Step 1: Checkout the repository

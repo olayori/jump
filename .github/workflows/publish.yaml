@@ -27,6 +27,6 @@ jobs:
         uses: 'google-github-actions/upload-cloud-storage@v1'
         with:
           path: 'test'
-          destination: 'ladsite/jumpcloud_pipeline/test
+          destination: 'ladsite/jumpcloud_pipeline/test'
           process_gcloudignore: false
           parent: true
